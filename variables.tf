@@ -128,8 +128,3 @@ variable "ecr_arn" {
   type        = string
   description = "AWS ECR Repository ARN"
 }
-
-variable "account_id" {
-  type        = string
-  description = "AWS Account ID"
-}
