@@ -128,3 +128,8 @@ variable "ecr_arn" {
   type        = string
   description = "AWS ECR Repository ARN"
 }
+
+variable "SSH_PRIVATE_KEY" {
+  type        = string
+  description = "Git SSH Private Key loaded in from environment variables only(!). This will expose your SSH key to encrypted AWS S3 terraform state file storage."
+}

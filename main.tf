@@ -2,6 +2,19 @@ locals {
   resource_name = "${var.environment}-${var.git_repo}"
 
   tags = var.tags
+
+  ssh_key_object = {
+    name  = "SSH_PRIVATE_KEY"
+    type  = "PLAINTEXT"
+    value = var.SSH_PRIVATE_KEY
+  }
+
+  # If a Git SSH Key is provided, add it to the environment variables for the container builds
+  # Note: 
+  # This will expose your SSH key to the Terraform state file, make sure it's encrypted!
+  # This will also expose the SSH key in the CodeBuild logs and execution, better solution is to use PARAMETER_STORE and retrieve it inside the build.
+  container_build_vars = var.SSH_PRIVATE_KEY == "" ? var.container_build_environment_variables : merge(local.ssh_key_object, var.container_build_environment_variables)
+  extract_build_vars = var.SSH_PRIVATE_KEY == "" ? var.cfn_extract_environment_variables : merge(local.ssh_key_object, var.cfn_extract_environment_variables)
 }
 
 # -----------------------------------------------------------------------------
@@ -233,7 +246,7 @@ module "codebuild_container" {
   build_image = var.build_image
   buildspec   = var.container_buildspec
 
-  environment_variable_map = var.container_build_environment_variables
+  environment_variable_map = local.container_build_vars
   s3_artifact_store_arn    = try(one(aws_s3_bucket.artifact_store.*.arn), "")
   s3_artifact_store_bucket = one(aws_s3_bucket.artifact_store.*.bucket)
   ecr_arn                  = var.ecr_arn
@@ -255,7 +268,7 @@ module "codebuild_extract_cfn" {
   build_image = var.build_image
   buildspec   = var.extract_cfn_buildspec
 
-  environment_variable_map = var.cfn_extract_environment_variables
+  environment_variable_map = local.extract_build_vars
   s3_artifact_store_arn    = try(one(aws_s3_bucket.artifact_store.*.arn), "")
   s3_artifact_store_bucket = one(aws_s3_bucket.artifact_store.*.bucket)
   ecr_arn                  = var.ecr_arn

@@ -7,8 +7,8 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - cd frontend/
-      - docker build -t $IMAGE_URI:$IMAGE_TAG .
+      - cd eezze/
+      - docker build -t $IMAGE_URI:$IMAGE_TAG --build-arg SSH_PRIVATE_KEY=$SSH_PRIVATE_KEY . 
   post_build:
     commands:
       - echo Pushing the Docker image...
