@@ -13,8 +13,8 @@ locals {
   # Note: 
   # This will expose your SSH key to the Terraform state file, make sure it's encrypted!
   # This will also expose the SSH key in the CodeBuild logs and execution, better solution is to use PARAMETER_STORE and retrieve it inside the build.
-  container_build_vars = var.SSH_PRIVATE_KEY == "" ? var.container_build_environment_variables : merge(local.ssh_key_object, var.container_build_environment_variables)
-  extract_build_vars = var.SSH_PRIVATE_KEY == "" ? var.cfn_extract_environment_variables : merge(local.ssh_key_object, var.cfn_extract_environment_variables)
+  container_build_vars = var.SSH_PRIVATE_KEY == "" ? var.container_build_environment_variables : concat(local.ssh_key_object, var.container_build_environment_variables)
+  extract_build_vars = var.SSH_PRIVATE_KEY == "" ? var.cfn_extract_environment_variables : concat(local.ssh_key_object, var.cfn_extract_environment_variables)
 }
 
 # -----------------------------------------------------------------------------
