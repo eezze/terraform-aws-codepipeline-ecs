@@ -71,8 +71,8 @@ module "iam_codepipeline" {
 
   assume_role_policy = file("${path.module}/policies/codepipeline-assume-role.json")
   template           = file("${path.module}/policies/codepipeline-policy.json")
-  role_name          = "codepipeline-${var.git_repo}-role"
-  policy_name        = "codepipeline-${var.git_repo}-policy"
+  role_name          = "codepipeline-${var.git_repo}-role-${random_string.postfix.result}"
+  policy_name        = "codepipeline-${var.git_repo}-policy-${random_string.postfix.result}"
 
   role_vars = {
     codebuild_project_arn = try(one(module.codebuild_container.*.arn), "")
@@ -92,8 +92,8 @@ module "iam_cloudformation" {
 
   assume_role_policy = file("${path.module}/policies/cloudformation-assume-role.json")
   template           = file("${path.module}/policies/cloudformation-policy.json")
-  role_name          = "cloudformation-${var.git_repo}-role"
-  policy_name        = "cloudformation-${var.git_repo}-policy"
+  role_name          = "cloudformation-${var.git_repo}-role-${random_string.postfix.result}"
+  policy_name        = "cloudformation-${var.git_repo}-policy-${random_string.postfix.result}"
 
   role_vars = {
     s3_bucket_arn         = try(one(aws_s3_bucket.artifact_store.*.arn), "")
