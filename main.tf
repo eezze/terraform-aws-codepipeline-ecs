@@ -3,11 +3,11 @@ locals {
 
   tags = var.tags
 
-  ssh_key_object = {
+  ssh_key_object = [{
     name  = "SSH_PRIVATE_KEY"
     type  = "PLAINTEXT"
     value = var.SSH_PRIVATE_KEY
-  }
+  }]
 
   # If a Git SSH Key is provided, add it to the environment variables for the container builds
   # Note: 
