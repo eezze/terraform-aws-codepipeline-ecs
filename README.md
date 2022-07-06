@@ -62,7 +62,7 @@ which yields:
 }
 ```
 
-In case other Github repositories need to be accessed from the Dockerfile, we can set the SSH key as a variable, run `setSshKeyToEnv.sh` to set the `SSH_PRIVATE_KEY` terraform variable via the environment variables. This requires an existing SSH key to be configured at `~/.ssh/github_rsa`.
+In case other Github repositories need to be accessed from the Dockerfile, we can set the SSH key as a variable, run `setSshKeyToEnv.sh` to set the `SSH_PRIVATE_KEY` terraform variable via the environment variable `TF_VAR_SSH_PRIVATE_KEY`. This requires an existing SSH key to be configured at `~/.ssh/github_rsa`.
 
 We definitely do not want to store SSH keys in the `tfvars` as plaintext, however this will store this key in the Terraform state file, ensure it's properly encrypted.
 
