@@ -3,7 +3,6 @@ locals {
 
   tags = var.tags
 }
-
 data "aws_iam_policy_document" "policy_codebuild" {
   statement {
     effect = "Allow"
@@ -68,10 +67,18 @@ data "aws_iam_policy_document" "assume_role_codebuild" {
   }
 }
 
+resource "random_string" "postfix" {
+  length  = 6
+  numeric = false
+  upper   = false
+  special = false
+  lower   = true
+}
+
 resource "aws_iam_role" "codebuild" {
   count = var.codepipeline_module_enabled ? 1 : 0
 
-  name = local.resource_name
+  name = "${local.resource_name}-${random_string.postfix.result}"
 
   assume_role_policy = one(data.aws_iam_policy_document.assume_role_codebuild.*.json)
 
@@ -81,7 +88,7 @@ resource "aws_iam_role" "codebuild" {
 resource "aws_iam_policy" "_" {
   count = var.codepipeline_module_enabled ? 1 : 0
 
-  name = local.resource_name
+  name = "${local.resource_name}-${random_string.postfix.result}"
 
   policy = one(data.aws_iam_policy_document.policy_codebuild.*.json)
 
