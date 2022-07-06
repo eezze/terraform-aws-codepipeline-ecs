@@ -107,7 +107,7 @@ resource "aws_iam_policy_attachment" "_" {
 resource "aws_codebuild_project" "_" {
   count = var.codepipeline_module_enabled ? 1 : 0
 
-  name          = "${local.resource_name}-codebuild"
+  name          = "${local.resource_name}-codebuild-${random_string.postfix.result}"
   description   = "${local.resource_name}_codebuild_project"
   build_timeout = var.build_timeout
   badge_enabled = var.badge_enabled
